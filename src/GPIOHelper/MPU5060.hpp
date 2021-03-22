@@ -13,6 +13,8 @@ class I2CBus;
   */
 class MPU5060 {
 	I2CDevice* _device;
+	double _dpsPerDigit, _rangePerDigit;
+
 public:
 	/**
 	 * Create new MPU5060 Class to Control the Chip via I²C
@@ -34,4 +36,5 @@ public:
 	void SetFullScaleAccelRange(const unsigned char range);
 	void SetSleepEnabled(bool enabled);
 	void GetMotion6(int16_t* ax, int16_t* ay, int16_t* az, int16_t* gx, int16_t* gy, int16_t* gz);
+	double GetTemp();
 };

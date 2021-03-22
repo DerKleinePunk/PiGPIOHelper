@@ -18,6 +18,7 @@
 using namespace std::chrono_literals;
 
 //https://github.com/jrowberg/i2cdevlib/blob/master/RaspberryPi_bcm2835
+//https://github.com/jarzebski/Arduino-MPU6050/blob/master/MPU6050.cpp
 
 INITIALIZE_EASYLOGGINGPP
 
@@ -87,6 +88,7 @@ int main(int argc, char** argv)
         mpu->GetMotion6(&ax, &ay, &az, &gx, &gy, &gz);
         //printf("  %d \t %d \t %d \t %d \t %d \t %d\r", ax, ay, az, gx, gy, gz);
         std::cout << "Motion " << ax << "\t" << ay << "\t" << az << "\t" << gx << "\t" << gy << "\t" << gz << std::endl;
+        std::cout << "MPU Temp " << mpu->GetTemp() << std::endl;
         std::this_thread::sleep_for(500ms);
     }
     

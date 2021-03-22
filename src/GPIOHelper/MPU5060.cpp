@@ -43,14 +43,17 @@
 
 #define MPU6050_PWR1_SLEEP_BIT 6
 
-#define MPU6050_RA_ACCEL_XOUT_H     0x3B
-#define MPU6050_RA_ACCEL_XOUT_L     0x3C
-#define MPU6050_RA_ACCEL_YOUT_H     0x3D
-#define MPU6050_RA_ACCEL_YOUT_L     0x3E
-#define MPU6050_RA_ACCEL_ZOUT_H     0x3F
-#define MPU6050_RA_ACCEL_ZOUT_L     0x40
+#define MPU6050_RA_ACCEL_XOUT_H 0x3B
+#define MPU6050_RA_ACCEL_XOUT_L 0x3C
+#define MPU6050_RA_ACCEL_YOUT_H 0x3D
+#define MPU6050_RA_ACCEL_YOUT_L 0x3E
+#define MPU6050_RA_ACCEL_ZOUT_H 0x3F
+#define MPU6050_RA_ACCEL_ZOUT_L 0x40
+#define MPU6050_REG_TEMP_OUT_H 0x41
 
-MPU5060::MPU5060(I2CBus* bus, unsigned char deviceAddr)
+MPU5060::MPU5060(I2CBus* bus, unsigned char deviceAddr):
+    _dpsPerDigit(0.0),
+    _rangePerDigit(0.0)
 {
     el::Loggers::getLogger(ELPP_DEFAULT_LOGGER);
     _device = new I2CDevice(bus, deviceAddr);
@@ -94,7 +97,12 @@ void MPU5060::SetClockSource(const unsigned char source)
  */
 void MPU5060::SetFullScaleGyroRange(const unsigned char range)
 {
-    _device->WriteBits(MPU6050_RA_GYRO_CONFIG, MPU6050_GCONFIG_FS_SEL_BIT, MPU6050_GCONFIG_FS_SEL_LENGTH, range);
+    const auto result = _device->WriteBits(MPU6050_RA_GYRO_CONFIG, MPU6050_GCONFIG_FS_SEL_BIT, MPU6050_GCONFIG_FS_SEL_LENGTH, range);
+    if(result <0) return;
+
+    if(range == MPU6050_GYRO_FS_250) {
+        _dpsPerDigit = .007633f;
+    }
 }
 
 /** Set full-scale accelerometer range.
@@ -124,7 +132,8 @@ void MPU5060::SetSleepEnabled(bool enabled)
  * @see getRotation()
  * @see MPU6050_RA_ACCEL_XOUT_H
  */
-void MPU5060::GetMotion6(int16_t* ax, int16_t* ay, int16_t* az, int16_t* gx, int16_t* gy, int16_t* gz) {
+void MPU5060::GetMotion6(int16_t* ax, int16_t* ay, int16_t* az, int16_t* gx, int16_t* gy, int16_t* gz)
+{
     unsigned char buffer[14];
 
     _device->ReadBytes(MPU6050_RA_ACCEL_XOUT_H, 14, buffer);
@@ -134,4 +143,13 @@ void MPU5060::GetMotion6(int16_t* ax, int16_t* ay, int16_t* az, int16_t* gx, int
     *gx = (((int16_t)buffer[8]) << 8) | buffer[9];
     *gy = (((int16_t)buffer[10]) << 8) | buffer[11];
     *gz = (((int16_t)buffer[12]) << 8) | buffer[13];
+}
+
+double MPU5060::GetTemp()
+{
+    unsigned char buffer[2];
+
+    _device->ReadBytes(MPU6050_REG_TEMP_OUT_H, 2, buffer);
+    int16_t value = (((int16_t)buffer[0]) << 8) | buffer[1];
+    return (double)value / 340.0 + 36.53;
 }
