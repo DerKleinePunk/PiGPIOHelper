@@ -1,0 +1,6 @@
+https://medium.com/@kavindugimhanzoysa/lets-work-with-mpu6050-gy-521-part1-6db0d47a35e6
+http://www.brokking.net/imu.html
+https://maker.pro/arduino/tutorial/how-to-interface-arduino-and-the-mpu-6050-sensor
+
+https://github.com/webfraggle/SmartHomeWebRemote
+https://github.com/larsks/gpio-watch
