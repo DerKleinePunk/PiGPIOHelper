@@ -5,6 +5,9 @@
 #define ELPP_CURR_FILE_PERFORMANCE_LOGGER_ID ELPP_DEFAULT_LOGGER
 #endif
 
+//Based On https://github.com/jrowberg/i2cdevlib/blob/master/RaspberryPi_bcm2835/MPU6050/MPU6050.cpp
+//and https://github.com/jarzebski/Arduino-MPU6050/blob/master/MPU6050.cpp
+
 #include "MPU5060.hpp"
 #include "../common/easylogging/easylogging++.h"
 #include "../common/exception/ConfigErrorException.hpp"
@@ -100,8 +103,23 @@ void MPU5060::SetFullScaleGyroRange(const unsigned char range)
     const auto result = _device->WriteBits(MPU6050_RA_GYRO_CONFIG, MPU6050_GCONFIG_FS_SEL_BIT, MPU6050_GCONFIG_FS_SEL_LENGTH, range);
     if(result <0) return;
 
-    if(range == MPU6050_GYRO_FS_250) {
-        _dpsPerDigit = .007633f;
+    _dpsPerDigit = 1.0f;
+    switch (range)
+    {
+        case MPU6050_GYRO_FS_250:
+            _dpsPerDigit = .007633f;
+            break;
+        case MPU6050_GYRO_FS_500:
+            _dpsPerDigit = .015267f;
+            break;
+        case MPU6050_GYRO_FS_1000:
+            _dpsPerDigit = .030487f;
+            break;
+        case MPU6050_GYRO_FS_2000:
+            _dpsPerDigit = .060975f;
+            break;
+        default:
+            break;
     }
 }
 
