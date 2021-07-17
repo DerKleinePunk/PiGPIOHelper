@@ -6,3 +6,5 @@ https://github.com/webfraggle/SmartHomeWebRemote
 https://github.com/larsks/gpio-watch
 
 https://github.com/InnovateAsterisk/Raspberry-Pi-Tablet
+
+https://github.com/rfetick/MPU6050_light
