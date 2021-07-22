@@ -8,12 +8,16 @@
 #include <iostream>
 #include <chrono>
 #include <thread>
+#include <limits>
+#include <iomanip>
+
 
 #include "../../src/GPIOHelper/MPU5060.hpp"
 #include "../../src/GPIOHelper/I2CBus.hpp"
 #include "../../src/common/easylogging/easylogging++.h"
 #include "../../src/common/utils/commonutils.h"
 #include "config.hpp"
+
 
 using namespace std::chrono_literals;
 
@@ -80,15 +84,22 @@ int main(int argc, char** argv)
         LOG(INFO) << "gy521 Found";
     }
 
-    int16_t ax, ay, az;
+    /*int16_t ax, ay, az;
     int16_t gx, gy, gz;
+    int16_t temp;
+    double accX, accY, accZ, gyroX, gyroY, gyroZ, tempC;*/
+    double angleAccX, angleAccY, angleX, angleY, angleZ;
 
     for (uint i = 0; i < 20; i++)
     {
-        mpu->GetMotion6(&ax, &ay, &az, &gx, &gy, &gz);
-        //printf("  %d \t %d \t %d \t %d \t %d \t %d\r", ax, ay, az, gx, gy, gz);
-        std::cout << "Motion " << ax << "\t" << ay << "\t" << az << "\t" << gx << "\t" << gy << "\t" << gz << std::endl;
-        std::cout << "MPU Temp " << mpu->GetTemp() << std::endl;
+        //mpu->GetRawMotion6(&ax, &ay, &az, &gx, &gy, &gz, &temp);
+        //std::cout << "Motion " << ax << "\t" << ay << "\t" << az << "\t" << gx << "\t" << gy << "\t" << gz << std::endl;
+        //std::cout << "MPU Temp " << temp << std::endl;
+        //mpu->GetMotion6(&accX, &accY, &accZ, &gyroX, &gyroY, &gyroZ, &tempC);
+        //std::cout << "Motion " << accX << "\t" << accY << "\t" << accZ << "\t" << gyroX << "\t" << gyroY << "\t" << gyroZ << std::endl;
+        //std::cout << "MPU Temp " << tempC << std::endl;
+        mpu->GetAngels(&angleAccX, &angleAccY, &angleX, &angleY, &angleZ);
+        std::cout << std::fixed << std::setprecision(3) << "Angles " << std::setw(9) << angleAccX << std::setw(9) << angleAccY << std::setw(9) << angleX << std::setw(9) << angleY << std::setw(9) << angleZ << std::endl;
         std::this_thread::sleep_for(500ms);
     }
     
