@@ -8,3 +8,5 @@ https://github.com/larsks/gpio-watch
 https://github.com/InnovateAsterisk/Raspberry-Pi-Tablet
 
 https://github.com/rfetick/MPU6050_light
+
+http://ecee.colorado.edu/ecen3000/labs/lab6/MotionSensing.pdf
