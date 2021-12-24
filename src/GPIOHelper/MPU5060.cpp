@@ -262,9 +262,9 @@ void MPU5060::GetAngels(double* angleAccX, double* angleAccY, double* angleX, do
     _lastTime = now;
 
     // Compute the (filtered) gyro angles
-    double gyro_angle_x = gyroX*dt + get_last_x_angle();
+    /*double gyro_angle_x = gyroX*dt + get_last_x_angle();
     double gyro_angle_y = gyroY*dt + get_last_y_angle();
-    double gyro_angle_z = gyroZ*dt + get_last_z_angle();
+    double gyro_angle_z = gyroZ*dt + get_last_z_angle();*/
 
     // Correctly wrap X and Y angles (special thanks to Edgar Bonet!)
     // https://github.com/gabriel-milan/TinyMPU6050/issues/6

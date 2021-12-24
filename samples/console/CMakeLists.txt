@@ -2,7 +2,7 @@ project("PiGpIoConsole" VERSION "${RELEASE_VERSION}" LANGUAGES CXX)
 
 MESSAGE(STATUS "Try Build ${PROJECT_NAME} in Version ${RELEASE_VERSION}")
 
-configure_file("${MAINFOLDER}/samples/console/config.hpp.in" "${MAINFOLDER}//samples/console/config.hpp")
+configure_file("config.hpp.in" "config.hpp")
 
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pthread")
 
