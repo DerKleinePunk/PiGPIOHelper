@@ -90,6 +90,7 @@ public:
      *    see pin_trigger
      */
     explicit GpioPin(const std::string& port, pin_direction direction, pin_trigger trigger = pin_trigger::none);
+    explicit GpioPin(std::uint8_t port, bool output);
     GpioPin(const GpioPin& orig) = delete;
     GpioPin(GpioPin&& other) = delete;
     GpioPin& operator=(const GpioPin& other) = delete;

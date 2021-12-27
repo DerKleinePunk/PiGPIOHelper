@@ -66,18 +66,16 @@ std::ostream& operator<<(std::ostream& os, const pin_value c) {
 	return os;
 }
 
-//******************************************************************************
-//* Parameter Konstructor:                                                     *
-//* port     : Port Nummer (siehe Board Doku)                               *
-//* direction: "in", "out"                                                  *
-//* trigger  : "none"    (kein Trigger wird ausgelöst)                      *
-//*               "falling" (fallende Flanke löst Trigger aus)                 *
-//*               "rising"  (steigende Flanke löst Trigger aus)                *
-//*               "both"    (beide Flanken lösen Trigger aus)                  *
-//*                                                                            *
-//******************************************************************************
-
-
+/**
+ * @brief Construct a new Gpio Pin:: Gpio Pin object
+ * 
+ * @param port 
+ * @param direction : "in", "out"
+ * @param trigger trigger  : "none"    (kein Trigger wird ausgelöst) 
+ *                           "falling" (fallende Flanke löst Trigger aus)
+ *                           "rising"  (steigende Flanke löst Trigger aus)
+ *                           "both"    (beide Flanken lösen Trigger aus)
+ */
 GpioPin::GpioPin(const std::string& port, pin_direction direction, pin_trigger trigger) {
     el::Loggers::getLogger(ELPP_DEFAULT_LOGGER);
     _port = port;
@@ -133,6 +131,10 @@ GpioPin::GpioPin(const std::string& port, pin_direction direction, pin_trigger t
     }
 }
 
+GpioPin::GpioPin(std::uint8_t port, bool output):
+    GpioPin(std::to_string(port), output ? pin_direction::out : pin_direction::in, pin_trigger::none) {
+
+}
 
 GpioPin::~GpioPin() {
     LOG(DEBUG) << "Start Gpio Destructor ... ";
