@@ -42,6 +42,11 @@
 #include "../common/easylogging/easylogging++.h"
 #include "../common/exception/ConfigErrorException.hpp"
 
+/**
+ * @brief Construct a new I2CBus::I2CBus object
+ * 
+ * @param device 
+ */
 I2CBus::I2CBus(std::string device)
 {
     el::Loggers::getLogger(ELPP_DEFAULT_LOGGER);
@@ -61,7 +66,7 @@ I2CBus::~I2CBus()
     }
 }
 
-/** Read multiple bits from an 8-bit device register.
+/** @brief Read multiple bits from an 8-bit device register.
  * @param deviceAddr I2C slave device address
  * @param regAddr Register regAddr to read from
  * @param bitStart First bit position to read (0-7)
