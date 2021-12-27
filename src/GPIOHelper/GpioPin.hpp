@@ -97,8 +97,11 @@ public:
     GpioPin& operator=(GpioPin&& other) = delete;
     virtual ~GpioPin();
     void operator<< (int iValue);
+    void operator<< (pin_value value);
     void operator>> (int& iValue);
     void Register(pin_change_delegate callback);
+    pin_direction GetDirection() const;
+
 };
 
 #endif /* GPIOPIN_H */

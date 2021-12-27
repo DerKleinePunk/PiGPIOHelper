@@ -33,6 +33,8 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/inotify.h>
+#include <chrono>
+#include <thread>
 #include "../common/easylogging/easylogging++.h"
 #include "../common/exception/ConfigErrorException.hpp"
 #include "GpioPin.hpp"
@@ -94,6 +96,9 @@ GpioPin::GpioPin(const std::string& port, pin_direction direction, pin_trigger t
     filePortExport << _port;
     filePortExport.close ();
 
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    //We need wait a little rigths an so on
+
     // Port als Eingang/Ausgang konfigurieren
     std::string address = "/sys/class/gpio/gpio";
     address += _port;
@@ -101,7 +106,7 @@ GpioPin::GpioPin(const std::string& port, pin_direction direction, pin_trigger t
     std::ofstream filePortDirect(address);
 
     if (!filePortDirect) {
-	LOG(ERROR) << "Port konnte nicht als " << _direction << " konfiguriert werden";
+	    LOG(ERROR) << "Port konnte nicht als " << _direction << " konfiguriert werden";
         throw ConfigErrorException("Port konnte nicht konfiguriert werden");
     }
 
@@ -162,11 +167,19 @@ GpioPin::~GpioPin() {
 // Port ein/aus schalten.
 void GpioPin::operator<< (const int iValue) {
     if(_direction != pin_direction::out) {
-        throw ConfigErrorException("eine Input kann man nicht beschreiben");
-	return;
+        throw ConfigErrorException("we can write only on out pins");
+	    return;
     }
     _filePortValue << iValue << std::flush;
     //std::cout << "port value is " << iValue << std::endl;
+}
+
+void GpioPin::operator<< (pin_value value) {
+    if(value == pin_value::on) {
+        operator<<(1);
+    } else if(value == pin_value::off) {
+        operator<<(0);
+    }
 }
   
 // Aktuellen Port Zustand ein/aus lesen.
@@ -196,6 +209,11 @@ void GpioPin::operator>> (int& iValue) {
 
 void GpioPin::Register(pin_change_delegate callback) {
     _callback = callback;
+}
+
+pin_direction GpioPin::GetDirection() const
+{
+    return _direction;
 }
 
 // Prüfe ob ein Trigger am Port ausgelöst wurde.
@@ -234,7 +252,7 @@ void GpioPin::CheckTrigger() {
             if (event->len) {
                 if (event->mask & IN_MODIFY) {
                     if (event->mask & IN_ISDIR) {
-			LOG(DEBUG) << "The directory " << event->name <<  " was modified.";
+			            LOG(DEBUG) << "The directory " << event->name <<  " was modified.";
                     } else {
                         if(_callback != nullptr) {
                             int value;
