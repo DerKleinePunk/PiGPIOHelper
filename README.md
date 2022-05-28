@@ -2,6 +2,14 @@
 
 ## How to build
 
+mkdir build
+cd build
+cmake ..
+cmake . --build
+
+This Repro is to using als git module.
+only Samples are here not an working app
+
 ## Using
 
 ### GPIO Output Pin
@@ -31,7 +39,7 @@ Callback is Called wenn pin input Falling
 
 ```cpp
    auto i2cBus = new I2CBus("/dev/i2c-1");
-   auto mcpImpl = new MCP23017(i2cBus, 0x00);
+   auto mcpImpl = new MCP23017(i2cBus, 0x20);
    mcpImpl.SetPin(0, pin_value::on); // Set the 0 Pin On
 
 ```
