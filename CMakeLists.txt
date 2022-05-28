@@ -20,12 +20,15 @@ message(STATUS "Compiler ${CMAKE_CXX_COMPILER_ID}")
 message(STATUS "Building on ${CMAKE_SYSTEM_NAME}")
 MESSAGE(STATUS "Build for ${TARGET}")
 
+SET ( PROJECT_NAME "GPIOHelper" )
+PROJECT(${PROJECT_NAME}) 
+
 #
 # Project Output Paths
 #
 SET (MAINFOLDER ${PROJECT_SOURCE_DIR})
 IF("${TARGET}" STREQUAL "")
-   message(WARNING "TARGET not set please add -DTRAGET to command line Suported Target are Linux,PI (crosscompile)")
+   message(WARNING "TARGET not set please add -DTARGET to command line Suported Target are Linux,PI (crosscompile)")
    SET(TARGET ${CMAKE_SYSTEM_NAME})
 ENDIF()
 
