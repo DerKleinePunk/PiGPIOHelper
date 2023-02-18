@@ -83,6 +83,7 @@ GpioPin::GpioPin(const std::string& port, pin_direction direction, pin_trigger t
     _port = port;
     _direction = direction;
     _trigger = trigger;
+    _threadRun = false;
 
     LOG(DEBUG) << "Create Pin Class for " << _port << " with " << _direction << " " << _trigger;
 
@@ -168,7 +169,6 @@ GpioPin::~GpioPin() {
 void GpioPin::operator<< (const int iValue) {
     if(_direction != pin_direction::out) {
         throw ConfigErrorException("we can write only on out pins");
-	    return;
     }
     _filePortValue << iValue << std::flush;
     //std::cout << "port value is " << iValue << std::endl;
@@ -207,7 +207,7 @@ void GpioPin::operator>> (int& iValue) {
         LOG(WARNING) << "GPIO-Port-Stream, void operator>> (int& iValue): nix good";
 }
 
-void GpioPin::Register(pin_change_delegate callback) {
+void GpioPin::Register(const pin_change_delegate& callback) {
     _callback = callback;
 }
 
@@ -223,7 +223,7 @@ void GpioPin::CheckTrigger() {
     #define BUF_LEN     ( 1024 * ( EVENT_SIZE + 16 ) )
 	_threadRun = true;
 
-    int i = 0;
+    uint32_t i = 0;
     char buffer[BUF_LEN];
       
     _fileInotify = inotify_init1(IN_CLOEXEC);

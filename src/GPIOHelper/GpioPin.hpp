@@ -45,9 +45,9 @@ enum class pin_value : int {
 	on
 };
 
-std::ostream& operator<<(std::ostream& os, const pin_direction c);
-std::ostream& operator<<(std::ostream& os, const pin_trigger c);
-std::ostream& operator<<(std::ostream& os, const pin_value c);
+std::ostream& operator<<(std::ostream& os, pin_direction c);
+std::ostream& operator<<(std::ostream& os, pin_trigger c);
+std::ostream& operator<<(std::ostream& os, pin_value c);
 
 /**
  * CallBack delegate for Pin Value Change
@@ -99,7 +99,7 @@ public:
     void operator<< (int iValue);
     void operator<< (pin_value value);
     void operator>> (int& iValue);
-    void Register(pin_change_delegate callback);
+    void Register(const pin_change_delegate& callback);
     pin_direction GetDirection() const;
 
 };
