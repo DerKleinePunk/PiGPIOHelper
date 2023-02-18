@@ -223,7 +223,7 @@ void GpioPin::CheckTrigger() {
     #define BUF_LEN     ( 1024 * ( EVENT_SIZE + 16 ) )
 	_threadRun = true;
 
-    uint32_t i = 0;
+    ssize_t i = 0;
     char buffer[BUF_LEN];
       
     _fileInotify = inotify_init1(IN_CLOEXEC);
