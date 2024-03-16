@@ -1,5 +1,9 @@
 # Raspberry GPIO Helpers
 
+GPIO access via sysfs likely to be dropped
+see https://github.com/WiringPi/WiringPi/issues/186
+so Pin at now work only with Kernel < 6.6
+
 ## How to build
 
 mkdir build
